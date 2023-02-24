@@ -23,8 +23,8 @@ public class CalcularServlet extends HttpServlet {
 
         Integer calculo = first + second;
 
-        PrintWriter writer = response.getWriter();
-        writer.println("<html><body>O resultado da soma foi: " + calculo + "</body></html>");
+        request.setAttribute("result", calculo);
+        request.getRequestDispatcher("/result.jsp").forward(request, response);
     }
 
 }
