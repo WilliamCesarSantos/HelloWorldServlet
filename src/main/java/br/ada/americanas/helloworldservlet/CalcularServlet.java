@@ -10,9 +10,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "CalcularServlet", value = "/calcular")
 public class CalcularServlet extends HttpServlet {
+
+    private List<Operacao> operacoes = new ArrayList<>();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,11 +30,11 @@ public class CalcularServlet extends HttpServlet {
         String operator = request.getParameter("operator");
 
         Operacao operacao = OperacaoFactory.create(operator);
-        BigDecimal result = operacao.execute(first, second);
+        operacao.execute(first, second);
+        this.operacoes.add(operacao);
 
-        request.setAttribute("operator", operator);
-        request.setAttribute("result", result);
-        request.getRequestDispatcher("/result.jsp").forward(request, response);
+        request.setAttribute("historico_operacoes", this.operacoes);
+        request.getRequestDispatcher("/historico.jsp").forward(request, response);
     }
 
 }
