@@ -1,5 +1,7 @@
 package br.ada.americanas.helloworldservlet;
 
+import br.ada.americanas.helloworldservlet.operacao.Operacao;
+import br.ada.americanas.helloworldservlet.operacao.OperacaoFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,10 +9,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.math.BigDecimal;
 
 @WebServlet(name = "CalcularServlet", value = "/calcular")
 public class CalcularServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -18,12 +21,14 @@ public class CalcularServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer first = Integer.valueOf(request.getParameter("first"));
-        Integer second = Integer.valueOf(request.getParameter("second"));
+        BigDecimal first = new BigDecimal(request.getParameter("first"));
+        BigDecimal second = new BigDecimal(request.getParameter("second"));
+        String operator = request.getParameter("operator");
 
-        Integer calculo = first + second;
+        Operacao operacao = OperacaoFactory.create(operator);
+        BigDecimal result = operacao.execute(first, second);
 
-        request.setAttribute("result", calculo);
+        request.setAttribute("result", result);
         request.getRequestDispatcher("/result.jsp").forward(request, response);
     }
 
