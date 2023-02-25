@@ -28,6 +28,7 @@ public class CalcularServlet extends HttpServlet {
         Operacao operacao = OperacaoFactory.create(operator);
         BigDecimal result = operacao.execute(first, second);
 
+        request.setAttribute("operator", operator);
         request.setAttribute("result", result);
         request.getRequestDispatcher("/result.jsp").forward(request, response);
     }

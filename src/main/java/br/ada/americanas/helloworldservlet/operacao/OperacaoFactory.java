@@ -8,9 +8,12 @@ public class OperacaoFactory {
             case "+":
                 operacao = new SomaOperacao();
                 break;
+            case "-":
+                operacao = new SubtracaoOperacao();
+                break;
             default:
                 throw new RuntimeException("Operacao não permitida");
-        };
+        }
         return operacao;
     }
 
