@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,8 +16,6 @@ import java.util.List;
 
 @WebServlet(name = "CalcularServlet", value = "/calcular")
 public class CalcularServlet extends HttpServlet {
-
-    private List<Operacao> operacoes = new ArrayList<>();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,10 +30,21 @@ public class CalcularServlet extends HttpServlet {
 
         Operacao operacao = OperacaoFactory.create(operator);
         operacao.execute(first, second);
-        this.operacoes.add(operacao);
+        var operacoes = recuperaOperacoes(request);
+        operacoes.add(operacao);
 
-        request.setAttribute("historico_operacoes", this.operacoes);
+        request.setAttribute("historico_operacoes", operacoes);
         request.getRequestDispatcher("/historico.jsp").forward(request, response);
+    }
+
+    private List<Operacao> recuperaOperacoes(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        List<Operacao> operacoes = (List<Operacao>) session.getAttribute("historico_operacoes");
+        if (operacoes == null) {
+            operacoes = new ArrayList<>();
+            session.setAttribute("historico_operacoes", operacoes);
+        }
+        return operacoes;
     }
 
 }
