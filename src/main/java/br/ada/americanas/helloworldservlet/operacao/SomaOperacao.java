@@ -21,4 +21,8 @@ class SomaOperacao implements Operacao {
         return "+";
     }
 
+    @Override
+    public String toString() {
+        return first + " + " + second + " = " + result;
+    }
 }
