@@ -29,12 +29,13 @@ public class CalcularServlet extends HttpServlet {
         String operator = request.getParameter("operator");
 
         Operacao operacao = OperacaoFactory.create(operator);
-        operacao.execute(first, second);
+        var result = operacao.execute(first, second);
         var operacoes = recuperaOperacoes(request);
         operacoes.add(operacao);
 
-        request.setAttribute("historico_operacoes", operacoes);
-        request.getRequestDispatcher("/historico.jsp").forward(request, response);
+        request.setAttribute("result", result);
+        request.setAttribute("operator", operator);
+        request.getRequestDispatcher("/result.jsp").forward(request, response);
     }
 
     private List<Operacao> recuperaOperacoes(HttpServletRequest request) {

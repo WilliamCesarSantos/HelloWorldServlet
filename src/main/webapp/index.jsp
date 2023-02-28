@@ -19,6 +19,7 @@
                 <p>Informe o segundo número: <input type="number" name="second" required></p>
                 <p><input type="submit" value="Calcular"></p>
             </form>
+            <a href="/app/historico">Historico</a>
         </div>
     </body>
 </html>
